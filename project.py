@@ -16,18 +16,18 @@ class Player:
     def __init__(self, name):
         self.name = name
         print(name)
-        self.w = 21
-        self.h = 11
-        self.quadrants = [["#" + str(random.randint(100000, 999999)) for x in range(self.h)] for y in range(self.w)]
-
         self.thread = Thread(target=self.loop)
         print("Starting Thread")
         self.thread.start()
 
     def loop(self):
         i = 0
+        w = 20
+        h = 10
+        quadrants = [["#" + str(random.randint(100000, 999999)) for x in range(h + 2)] for y in range(w + 2)]
         while True:
-            a = dumps(self.quadrants)
+            quadrants[random.randint(0, w)-1][random.randint(0, h)-1] = "#%06x" % random.randint(0, 0xFFFFFF)
+            a = dumps(quadrants)
             socketio.emit('data', str(a))
             sleep(2)
             i += 2
@@ -39,6 +39,7 @@ niekto = Player("Dorf")
 
 
 print("routujeme")
+
 
 @app.route('/')
 def ghh():

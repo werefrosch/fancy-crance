@@ -7,8 +7,8 @@ var render = function(){
     c.clearRect(0, 0, canvas.width, canvas.height);
     var i, j, x, y,
         width = 20, height = 10;
-    for (i = 0; i <= height; i++){
-        for (j = 0; j <= width; j++){
+    for (i = 0; i < height; i++){
+        for (j = 0; j < width; j++){
             c.fillStyle = veci[j][i];
             c.fillRect(j*canvas.width / 20 - 9, i*canvas.height / 10 - 9, 8, 8);
         }
