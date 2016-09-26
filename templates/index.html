@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Room</title>
+    <script type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script type="text/javascript" src="ghttps://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+</head>
+<body>
+    <center>
+        <h1>Farebné štvorčeky</h1>
+
+    <canvas id="canvas" width="900" height="110"></canvas>
+    <script src="{{ url_for('static', filename='sockety.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='grafika.js') }}" type="text/javascript"></script>
+    <h2>chat</h2>
+    <input type="text" id="myName">
+    <button id="namebutton">Name</button>
+    <input type="text" id="myMessage">
+    <button id="sendbutton">Send</button>
+    <ul id="messages"></ul>
+    </center>
+</body>
+</html>
