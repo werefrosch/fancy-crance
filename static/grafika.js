@@ -2,18 +2,31 @@ var veci = [["#218762", "#635785", "#501187", "#651978", "#707632", "#601874", "
 
 var canvas = document.getElementById("canvas"),
          c = canvas.getContext("2d");
+/* daco */
+// daco ine
+c.font = "17px Georgia";
+c.textAlign = "center";
+
+var c_x = 1;
+var c_y = 1;
+var text = "nic";
 
 var render = function(){
     c.clearRect(0, 0, canvas.width, canvas.height);
     var i, j, x, y,
         width = 20, height = 10;
-    for (i = 0; i < height; i++){
-        for (j = 0; j < width; j++){
+    for (i = 0; i <= height; i++){
+        for (j = 0; j <= width; j++){
             c.fillStyle = veci[j][i];
-            c.fillRect(j*canvas.width / 20 - 9, i*canvas.height / 10 - 9, 8, 8);
+            c.fillRect(j*canvas.width/20 - canvas.width/20, i*(canvas.height - 20)/10 - (canvas.height - 20)/10, canvas.width/20, canvas.height/10);
+            c.fillStyle = "#000000";
+            //c.fillText(j +","+ i, j*canvas.width / 20 - 20, i*(canvas.height - 20) / 10 - 10);
         }
     }
+    c.fillText("X", c_x*canvas.width / 20 - 20, c_y*(canvas.height - 20) / 10 - 10);
+    c.fillText(text, canvas.width / 2, canvas.height - 4);
 }
+
 
 $(document).ready(function() {
     var userName = "Anonymous"
@@ -21,13 +34,37 @@ $(document).ready(function() {
     socket.on('connect', function() {
         socket.send('User has connected!');
     });
+
+    //receive message
     socket.on('message', function(msg) {
         $("#messages").append('<li>'+msg+'</li>');
         console.log('Received message');
     });
+
+    //receive map
     socket.on('data', function(pole) {
         veci = JSON.parse(pole)
+        socket.emit('cursor', c_x, c_y);
     });
+
+    socket.on('text', function(txt) {
+        text = txt
+    });
+
+    //arrows
+    function checkArrowKeys(e){
+        var arrs= ['left', 'up', 'right', 'down'],
+        key= window.event? event.keyCode: e.keyCode;
+        if (key && key>36 && key<41) {
+            if (arrs[key-37] == 'down') c_y += 1;
+            if (arrs[key-37] == 'up') c_y -= 1;
+            if (arrs[key-37] == 'right') c_x += 1;
+            if (arrs[key-37] == 'left') c_x -= 1;
+        }
+    }
+    document.onkeydown = checkArrowKeys;
+
+    //namebutton
     $('#namebutton').on('click', function() {
         userName = $('#myName').val()
     });
@@ -35,15 +72,18 @@ $(document).ready(function() {
         userName = $('#myName').val()
     });
 
+    //sendbutton
     $('#sendbutton').on('click', function() {
         socket.send($('#myMessage').val())
     });
     $('#myMessage').on('keyup', function() {
         if (event.keyCode==13) {
-            socket.send("Hi")
+            socket.send($('#myMessage').val())
             }
     });
 });
 
 
-setInterval(render, 500);
+
+
+setInterval(render, 300);
